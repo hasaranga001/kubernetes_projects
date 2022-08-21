@@ -1,0 +1,58 @@
+
+#  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+#  helm install ingress-nginx ingress-nginx/ingress-nginx
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-myservicea
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: service-clusterip
+            port:
+              number: 80
+        ingressClassName: nginx
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-clusterip
+spec:
+  selector:
+    apps: web
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+	
+	
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: my-deployment-01
+spec:
+  replicas: 4
+  selector:
+   matchLabels:
+    apps: web
+  template:
+   metadata:
+    labels:
+     apps: web
+   spec:
+    containers:
+    - name: webserver
+      image: nginx
+      ports:
+      - containerPort: 80
+	  
