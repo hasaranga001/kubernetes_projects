@@ -7,6 +7,7 @@ kind: Ingress
 metadata:
   name: ingress-myservicea
 spec:
+  ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -17,7 +18,6 @@ spec:
             name: service-clusterip
             port:
               number: 80
-        ingressClassName: nginx
 
 ---
 
