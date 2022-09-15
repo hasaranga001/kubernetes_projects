@@ -1,13 +1,34 @@
 apiVersion: v1
 kind: Service
 metadata:
- name: service-nodeip
+ name: service-nodeport
 spec:
  type: NodePort
  selector:
-  apps: web
+  apps: drupal
  ports:
  - protocol: TCP
    port: 80
    targetPort: 80
-   nodePort: 30080   # listning port
+   nodePort: 30050   # listning port
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: nodeport-deployment
+spec:
+  replicas: 2
+  selector:
+   matchLabels:
+    apps: drupal
+  template:
+   metadata:
+    labels:
+     apps: drupal
+   spec:
+    containers:
+    - name: drupal
+      image: drupal
+      ports:
+      - containerPort: 80
