@@ -29,6 +29,6 @@ spec:
    spec:
     containers:
     - name: drupal
-      image: drupal
+      image: nginx
       ports:
       - containerPort: 80
